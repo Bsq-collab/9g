@@ -18,7 +18,7 @@ def scanline_convert(polygons, i, screen, zbuffer ):
     x2=polygons[i+2][0]
     y2=polygons[i+2][1]
     z2=polygons[i+2][2]
-    #find the endpoints of each scanline
+    #top middle bottom
     if(y0>y2):
         t=x2
         x2=x0
