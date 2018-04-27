@@ -59,13 +59,13 @@ def scanline_convert(polygons, i, screen, zbuffer ):
         z1 = t
 
 
-    y=y0
+    y=int(y0)
     x_i=x0
     x_f=x0
     z_i=z0
     z_f=z1
 
-    draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+    draw_line(int(x_i), y, z_i, int(x_f), y, z_f, screen, zbuffer, color)
     m_xi=(x2-x0)/(y2-y0)
     m_zi=(z2-z0)/(y2-y0)
 
@@ -74,25 +74,24 @@ def scanline_convert(polygons, i, screen, zbuffer ):
         m_zf = (z1 - z0) / (y1 - y0)
 
         while (y < y1):
-            draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+            draw_line(int(x_i), y, z_i, int(x_f), y, z_f, screen, zbuffer, color)
             y += 1
             x_i += m_xi
             z_i += m_zi
             x_f += m_xf
             z_f += m_zf
 
-    y = y1
     x_f = x1
     z_f = z1
 
-    draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+    draw_line(int(x_i), y, z_i, int(x_f), y, z_f, screen, zbuffer, color)
 
     if ((y2 - y1) != 0):
         m_xf = (x2 - x1) / (y2 - y1)
         m_zf = (z2 - z1) / (y2 - y1)
 
         while (y < y2):
-            draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+            draw_line(int(x_i), y, z_i, int(x_f), y, z_f, screen, zbuffer, color)
             y += 1
             x_i += m_xi
             z_i += m_zi
