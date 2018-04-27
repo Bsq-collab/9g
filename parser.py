@@ -1,7 +1,7 @@
 from display import *
 from matrix import *
 from draw import *
-
+import random
 """
 Goes through the file named filename and performs all of the actions listed in that file.
 The file follows the following format:
