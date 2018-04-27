@@ -2,9 +2,103 @@ from display import *
 from matrix import *
 from math import *
 from gmath import *
+import random
 
 def scanline_convert(polygons, i, screen, zbuffer ):
-    pass
+    color = []
+    color.append(random.randint(0,255))
+    color.append(random.randint(0,255))
+    color.append(random.randint(0,255))
+    x0=polygons[i][0]
+    y0=polygons[i][1]
+    z0=polygons[i][2]
+    x1=polygons[i+1][0]
+    y1=polygons[i+1][1]
+    z1=polygons[i+1][2]
+    x2=polygons[i+2][0]
+    y2=polygons[i+2][1]
+    z2=polygons[i+2][2]
+    #find the endpoints of each scanline
+    if(y0>y2):
+        t=x2
+        x2=x0
+        x0=t
+
+        t=y2
+        y2=y0
+        y0=t
+
+        t=z2
+        z2=z0
+        z0=t
+
+    if(y0>y1):
+       t = x1
+       x1 = x0
+       x0 = t
+
+       t = y1
+       y1 = y0
+       y0 = t
+
+       t = z1
+       z1 = z0
+       z0 = t
+
+    if (y1 > y2):
+        t = x2
+        x2 = x1
+        x1 = t
+
+        t = y2
+        y2 = y1
+        y1 = t
+
+        t = z2
+        z2 = z1
+        z1 = t
+
+
+    y=y0
+    x_i=x0
+    x_f=x0
+    z_i=z0
+    z_f=z1
+
+    draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+    m_xi=(x2-x0)/(y2-y0)
+    m_zi=(z2-z0)/(y2-y0)
+
+    if ((y1 - y0) != 0):
+        m_xf = (x1 - x0) / (y1 - y0)
+        m_zf = (z1 - z0) / (y1 - y0)
+
+        while (y < y1):
+            draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+            y += 1
+            x_i += m_xi
+            z_i += m_zi
+            x_f += m_xf
+            z_f += m_zf
+
+    y = y1
+    x_f = x1
+    z_f = z1
+
+    draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+
+    if ((y2 - y1) != 0):
+        m_xf = (x2 - x1) / (y2 - y1)
+        m_zf = (z2 - z1) / (y2 - y1)
+
+        while (y < y2):
+            draw_line(x_i, y, z_i, x_f, y, z_f, screen, zbuffer, color)
+            y += 1
+            x_i += m_xi
+            z_i += m_zi
+            x_f += m_xf
+            z_f += m_zf
+
 
 def add_polygon( polygons, x0, y0, z0, x1, y1, z1, x2, y2, z2 ):
     add_point(polygons, x0, y0, z0);
@@ -22,27 +116,7 @@ def draw_polygons( matrix, screen, zbuffer, color ):
         normal = calculate_normal(matrix, point)[:]
 
         if normal[2] > 0:
-            draw_line( int(matrix[point][0]),
-                       int(matrix[point][1]),
-                       matrix[point][2],
-                       int(matrix[point+1][0]),
-                       int(matrix[point+1][1]),
-                       matrix[point+1][2],
-                       screen, zbuffer, color)
-            draw_line( int(matrix[point+2][0]),
-                       int(matrix[point+2][1]),
-                       matrix[point+2][2],
-                       int(matrix[point+1][0]),
-                       int(matrix[point+1][1]),
-                       matrix[point+1][2],
-                       screen, zbuffer, color)
-            draw_line( int(matrix[point][0]),
-                       int(matrix[point][1]),
-                       matrix[point][2],
-                       int(matrix[point+2][0]),
-                       int(matrix[point+2][1]),
-                       matrix[point+2][2],
-                       screen, zbuffer, color)
+            scanline_convert(matrix,point,screen,zbuffer)
         point+= 3
 
 
